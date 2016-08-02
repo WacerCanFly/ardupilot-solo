@@ -373,6 +373,10 @@ static union {
 // This is the state of the flight control system
 // There are multiple states defined such as STABILIZE, ACRO,
 static int8_t control_mode = STABILIZE;
+// control mode last demanded by the GPS glitch protection system
+static int8_t control_mode_glitch_on = ALT_HOLD;
+// control mode we will revert to when the glitch condition clears
+static int8_t control_mode_glitch_off = LOITER;
 // Structure used to detect changes in the flight mode control switch
 static struct {
     int8_t debounced_switch_position;   // currently used switch position
