@@ -28,9 +28,9 @@ static void gps_glitch_mode_change_commanded(uint8_t mode_commanded)
 static bool gps_glitch_action_mode(uint8_t mode) {
     switch(control_mode) {
         case LAND:
-            return landing_with_GPS();
+            return false;
         case RTL:
-            return rtl_state == Land;
+            return false;
         case GUIDED: // GUIDED for solo because shots modes use GUIDED
         case LOITER:
         case DRIFT:
@@ -46,9 +46,19 @@ static bool gps_glitch_action_mode(uint8_t mode) {
 static void gps_glitch_on_event() {
     failsafe.gps_glitch = true;
 
-    if (motors.armed() && gps_glitch_action_mode(control_mode) && !failsafe.radio) {
-        if(set_mode(ALT_HOLD)) {
-            gps_glitch_switch_mode_on_resolve = true;
+    if (motors.armed() && gps_glitch_action_mode(control_mode)) {
+        if (control_mode == GUIDED) {
+            if (!set_mode(RTL)) {
+                if (set_mode(LAND)) {
+                    gps_glitch_switch_mode_on_resolve = true;
+                }
+            } else {
+                gps_glitch_switch_mode_on_resolve = true;
+            }
+        } else if (!failsafe.radio) {
+            if (set_mode(ALT_HOLD)) {
+                gps_glitch_switch_mode_on_resolve = true;
+            }
         }
     }
 }
