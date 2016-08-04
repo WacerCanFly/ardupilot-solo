@@ -163,4 +163,9 @@ static void failsafe_ekf_off_event(void)
     // clear flag and log recovery
     failsafe.ekf = false;
     Log_Write_Error(ERROR_SUBSYSTEM_FAILSAFE_EKFINAV, ERROR_CODE_FAILSAFE_RESOLVED);
+
+    // tries to RTL if you were landing
+    if (control_mode == LAND) {
+        set_mode_RTL_or_land_with_pause();
+    }
 }
