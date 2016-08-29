@@ -88,6 +88,13 @@ void AP_MotorsQuad::setup_motors()
         add_motor(AP_MOTORS_MOT_2, 0, -160, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 3);
         add_motor(AP_MOTORS_MOT_3, -60, -60, 0, 4);
         add_motor(AP_MOTORS_MOT_4, 0, 160, AP_MOTORS_MATRIX_YAW_FACTOR_CW, 2);
+    }else if( _flags.frame_orientation == AP_MOTORS_SOLO_R10C_FRAME ) {
+        // Solo's CG is shifted significantly forward with the gimballed R10C
+        add_motor(AP_MOTORS_MOT_1,   47,  0.9209f,  1);
+        add_motor(AP_MOTORS_MOT_2, -138,  1.0000f,  3);
+        add_motor(AP_MOTORS_MOT_3,  -47, -0.9209f,  4);
+        add_motor(AP_MOTORS_MOT_4,  138, -1.0000f,  2);
+
     }else{
         // X frame set-up
         add_motor(AP_MOTORS_MOT_1,   45, AP_MOTORS_MATRIX_YAW_FACTOR_CCW, 1);
